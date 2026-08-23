@@ -6,7 +6,7 @@ The application allows users to securely register and log in, upload documents, 
 
 ## 🌐 Repository
 
-**GitHub:** [notes-generator-AI](https://github.com/duttasagar/notes-generator-AI)
+**GitHub:** [AI-Powered-Document-to-Notes-Generator](https://github.com/duttasagar/AI-Powered-Document-to-Notes-Generator)
 
 ---
 
