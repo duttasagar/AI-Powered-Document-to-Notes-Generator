@@ -1,4 +1,4 @@
-# 🤖 Notes Generator AI
+# 🤖 AI-Powered-Document-to-Notes-Generator
 
 An AI-powered document processing and notes generation application built with **FastAPI, React, Python, MySQL, SQLAlchemy, Redis, JWT Authentication, Google OAuth, and LLM-based AI processing**.
 
