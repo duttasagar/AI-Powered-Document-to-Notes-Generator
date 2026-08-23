@@ -14,27 +14,19 @@ The application allows users to securely register and log in, upload documents, 
 
 ### 🔐 Login
 
-![Login](screenshots/login.png)
+<img width="1915" height="910" alt="Screenshot 2026-08-23 205510" src="https://github.com/user-attachments/assets/6eae766c-faa5-4d27-9822-6bc6e0cc228d" />
+
 
 ### 📝 Registration & OTP Verification
+<img width="1918" height="912" alt="Screenshot 2026-08-23 205442" src="https://github.com/user-attachments/assets/8b05a74e-f4cf-4b0f-af2c-1539a5275450" />
+<img width="1910" height="908" alt="Screenshot 2026-08-23 205627" src="https://github.com/user-attachments/assets/4938f384-efa6-428a-acc2-03dd49108569" />
+<img width="1912" height="914" alt="Screenshot 2026-08-23 205653" src="https://github.com/user-attachments/assets/bc27bdd3-fd99-47ae-b5c4-5661633d6ec2" />
+<img width="1918" height="912" alt="Screenshot 2026-08-23 205727" src="https://github.com/user-attachments/assets/11be2f09-61ce-4dea-a6e3-f8818849b7be" />
 
-![Registration](screenshots/register.png)
 
 ### 📚 Document Dashboard
+<img width="1916" height="912" alt="Screenshot 2026-08-23 205537" src="https://github.com/user-attachments/assets/a2fd4bd1-c0c8-4bea-9246-2be465b04f68" />
 
-![Dashboard](screenshots/dashboard.png)
-
-### 📤 Document Upload
-
-![Document Upload](screenshots/document-upload.png)
-
-### 🤖 AI Notes Generation
-
-![AI Notes](screenshots/ai-notes.png)
-
-### 📖 Swagger API Documentation
-
-![Swagger](screenshots/swagger.png)
 
 ---
 
