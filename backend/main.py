@@ -8,7 +8,6 @@ from src.extraction.router import extraction_routes
 from src.notes_ai.router import ai_routes
 from starlette.middleware.sessions import SessionMiddleware
 from src.utils.settings import settings
-from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(engine)
 ensure_document_notes_column()
@@ -25,17 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        settings.FRONTEND_URL,
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=[
+#         settings.FRONTEND_URL,
+#         "http://localhost:5173",
+#         "http://127.0.0.1:5173",
+#     ],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 app.add_middleware(
     SessionMiddleware,
