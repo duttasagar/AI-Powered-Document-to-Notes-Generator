@@ -15,7 +15,8 @@ function googleCallbackParams() {
 
 function initialView() {
   const callbackParams = googleCallbackParams();
-  if (callbackParams?.get("token") && callbackParams.get("email")) return "dashboard";
+  if (callbackParams?.get("token") && callbackParams.get("email"))
+    return "dashboard";
   if (window.location.hash === "#dashboard") return "dashboard";
   if (window.location.hash === "#login") return "login";
   if (window.location.hash === "#forgot-password") return "forgot-password";
@@ -32,7 +33,8 @@ export default function App() {
     const email = callbackParams?.get("email");
     if (token && email) {
       localStorage.setItem("notely_access_token", token);
-      if (refreshToken) localStorage.setItem("notely_refresh_token", refreshToken);
+      if (refreshToken)
+        localStorage.setItem("notely_refresh_token", refreshToken);
       window.history.replaceState(null, "", "#dashboard");
       return email;
     }
@@ -45,15 +47,38 @@ export default function App() {
     window.history.replaceState(null, "", `#${nextView}`);
   }
 
-  const isAuthFlow = ["login", "forgot-password", "verify", "reset"].includes(view);
+  const isAuthFlow = ["login", "forgot-password", "verify", "reset"].includes(
+    view,
+  );
   const supportsGoogleLogin = view === "login" || view === "register";
-  if (view === "dashboard") return <Dashboard userName={userEmail || "there"} onLogout={() => switchView("login")} />;
+  if (view === "dashboard")
+    return (
+      <Dashboard
+        userName={userEmail || "there"}
+        onLogout={() => switchView("login")}
+      />
+    );
   const pageContent = {
-    login: { heading: "Welcome back", subtitle: "Sign in to turn your documents into useful notes." },
-    "forgot-password": { heading: "Reset your password", subtitle: "We will send a one-time password to your email." },
-    verify: { heading: "Check your email", subtitle: "Enter the verification code we just sent you." },
-    reset: { heading: "Choose a new password", subtitle: "Your account is almost ready for a fresh start." },
-    register: { heading: "Create your free account", subtitle: "Start turning long documents into clear study notes." },
+    login: {
+      heading: "Welcome back",
+      subtitle: "Sign in to turn your documents into useful notes.",
+    },
+    "forgot-password": {
+      heading: "Reset your password",
+      subtitle: "We will send a one-time password to your email.",
+    },
+    verify: {
+      heading: "Check your email",
+      subtitle: "Enter the verification code we just sent you.",
+    },
+    reset: {
+      heading: "Choose a new password",
+      subtitle: "Your account is almost ready for a fresh start.",
+    },
+    register: {
+      heading: "Create your free account",
+      subtitle: "Start turning long documents into clear study notes.",
+    },
   }[view];
 
   function startRegistrationVerification(email) {
@@ -69,24 +94,86 @@ export default function App() {
   }
 
   function renderPage() {
-    if (view === "login") return <LoginPage onForgotPassword={() => switchView("forgot-password")} onLogin={(email) => { setUserEmail(email); switchView("dashboard"); }} />;
-    if (view === "register") return <RegisterPage onRegistered={startRegistrationVerification} />;
-    if (view === "forgot-password") return <SendOtpPage onSent={startResetVerification} onBack={() => switchView("login")} />;
-    if (view === "verify") return <VerifyOtpPage email={flowEmail} mode={otpMode} onVerified={() => switchView(otpMode === "reset" ? "reset" : "login")} onBack={() => switchView(otpMode === "reset" ? "forgot-password" : "register")} />;
-    return <ResetPasswordPage email={flowEmail} onComplete={() => switchView("login")} />;
+    if (view === "login")
+      return (
+        <LoginPage
+          onForgotPassword={() => switchView("forgot-password")}
+          onLogin={(email) => {
+            setUserEmail(email);
+            switchView("dashboard");
+          }}
+        />
+      );
+    if (view === "register")
+      return <RegisterPage onRegistered={startRegistrationVerification} />;
+    if (view === "forgot-password")
+      return (
+        <SendOtpPage
+          onSent={startResetVerification}
+          onBack={() => switchView("login")}
+        />
+      );
+    if (view === "verify")
+      return (
+        <VerifyOtpPage
+          email={flowEmail}
+          mode={otpMode}
+          onVerified={() => switchView(otpMode === "reset" ? "reset" : "login")}
+          onBack={() =>
+            switchView(otpMode === "reset" ? "forgot-password" : "register")
+          }
+        />
+      );
+    return (
+      <ResetPasswordPage
+        email={flowEmail}
+        onComplete={() => switchView("login")}
+      />
+    );
   }
 
   return (
     <main className="auth-shell">
       <BrandPanel />
       <section className="form-panel" aria-labelledby="form-heading">
-        <div className="top-nav"><span>{isAuthFlow ? "New to Notely?" : "Already have an account?"}</span><button type="button" onClick={() => switchView(isAuthFlow ? "register" : "login")}>{isAuthFlow ? "Create account" : "Sign in"} <span aria-hidden="true">↗</span></button></div>
+        <div className="top-nav">
+          <span>
+            {isAuthFlow ? "New to Notely?" : "Already have an account?"}
+          </span>
+          <button
+            type="button"
+            onClick={() => switchView(isAuthFlow ? "register" : "login")}
+          >
+            {isAuthFlow ? "Create account" : "Sign in"}{" "}
+            <span aria-hidden="true">↗</span>
+          </button>
+        </div>
         <div className="form-wrap">
           <p className="mobile-kicker">WELCOME TO NOTELY</p>
           <h2 id="form-heading">{pageContent.heading}</h2>
           <p className="form-subtitle">{pageContent.subtitle}</p>
-          {supportsGoogleLogin && <div className="social-actions"><button className="social-button" type="button" onClick={() => { window.location.href = getGoogleLoginUrl(); }}><span className="google-g">G</span>Continue with Google</button></div>}
-          {supportsGoogleLogin && <div className="divider"><span>{view === "login" ? "or sign in with email" : "or sign up with email"}</span></div>}
+          {supportsGoogleLogin && (
+            <div className="social-actions">
+              <button
+                className="social-button"
+                type="button"
+                onClick={() => {
+                  window.location.href = getGoogleLoginUrl();
+                }}
+              >
+                <span className="google-g">G</span>Continue with Google
+              </button>
+            </div>
+          )}
+          {supportsGoogleLogin && (
+            <div className="divider">
+              <span>
+                {view === "login"
+                  ? "or sign in with email"
+                  : "or sign up with email"}
+              </span>
+            </div>
+          )}
           {renderPage()}
         </div>
         <p className="footer-note">Your notes are private by default.</p>
