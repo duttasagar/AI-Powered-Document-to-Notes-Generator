@@ -20,7 +20,34 @@ LocalSession = sessionmaker(
 )
 
 
+def ensure_document_notes_column():
+    existing_columns = {
+        column["name"]
+        for column in inspect(engine).get_columns("documents")
+    }
 
+    missing_columns = {
+        "generated_notes": "TEXT",
+        "error_message": "TEXT",
+    }
+
+    with engine.begin() as connection:
+        for column_name, column_type in missing_columns.items():
+            if column_name not in existing_columns:
+                connection.execute(
+                    text(
+                        f"ALTER TABLE documents "
+                        f"ADD COLUMN {column_name} {column_type}"
+                    )
+                )
+
+
+def get_db():
+    session = LocalSession()
+    try:
+        yield session
+    finally:
+        session.close()
 
 
 
