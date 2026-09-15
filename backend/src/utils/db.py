@@ -9,14 +9,6 @@ engine = create_engine(
     pool_pre_ping=True,
 )
 
-# engine = create_engine(
-#     settings.DB_CONNECTION,
-#     connect_args={
-#         "ssl": {
-#             "ssl_mode": "REQUIRED"
-#         }
-#     }
-# )
 
 LocalSession = sessionmaker(
     bind=engine,
