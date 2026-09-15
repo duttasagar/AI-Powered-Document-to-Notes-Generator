@@ -199,11 +199,7 @@ export default function Dashboard({ userName = "there", onLogout }) {
         <header className="dashboard-heading">
           <div>
             <p className="dashboard-kicker">YOUR WORKSPACE</p>
-            <h1>
-              Turn documents
-              <br />
-              into clear notes.
-            </h1>
+            <h1>Transform Chapters into Clear Study Notes</h1>
           </div>
           <p>
             Upload a document, and Notely will extract the important ideas into
