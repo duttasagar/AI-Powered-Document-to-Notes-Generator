@@ -1,4 +1,5 @@
 import os
+import shutil
 import pymupdf
 import pytesseract
 
@@ -6,9 +7,9 @@ from PIL import Image
 from fastapi import HTTPException, status
 
 
-pytesseract.pytesseract.tesseract_cmd = (
-    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-)
+tesseract_cmd = os.getenv("TESSERACT_CMD") or shutil.which("tesseract")
+if tesseract_cmd:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
 
 
 async def extract_text(file_path: str, file_type: str) -> str:
