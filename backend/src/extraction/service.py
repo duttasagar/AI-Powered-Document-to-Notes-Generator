@@ -1,10 +1,14 @@
 import os
 import shutil
+import logging
 import pymupdf
 import pytesseract
 
 from PIL import Image, ImageOps, ImageFilter
 from fastapi import HTTPException, status
+
+
+logger = logging.getLogger(__name__)
 
 
 # Find Tesseract executable
@@ -22,21 +26,37 @@ async def extract_text(file_path: str, file_type: str) -> str:
             detail="File not found"
         )
 
+    # Prefer the file extension when the upload client supplied a generic MIME type.
+    extension_types = {
+        ".pdf": "application/pdf",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+        ".txt": "text/plain",
+    }
+    normalized_type = extension_types.get(
+        os.path.splitext(file_path)[1].lower(),
+        file_type.split(";", 1)[0].strip().lower(),
+    )
+
+    logger.info("Starting text extraction: path=%s type=%s", file_path, normalized_type)
+
     # PDF
-    if file_type == "application/pdf":
+    if normalized_type == "application/pdf":
         return extract_pdf_text(file_path)
 
     # JPG / JPEG / PNG / other images
-    if file_type.startswith("image/"):
+    if normalized_type.startswith("image/"):
         return extract_image_text(file_path)
 
     # TXT
-    if file_type == "text/plain":
+    if normalized_type == "text/plain":
         return extract_txt(file_path)
 
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail=f"Text extraction is not supported for {file_type}"
+        detail=f"Text extraction is not supported for {normalized_type}"
     )
 
 
@@ -83,11 +103,18 @@ def run_ocr(image: Image.Image) -> str:
 
     config = "--oem 3 --psm 6"
 
-    text = pytesseract.image_to_string(
-        image,
-        config=config,
-        lang="eng"
-    )
+    try:
+        text = pytesseract.image_to_string(
+            image,
+            config=config,
+            lang="eng"
+        )
+    except pytesseract.TesseractNotFoundError as error:
+        logger.exception("Tesseract is not available for OCR")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="OCR is unavailable on the server. Please contact the administrator.",
+        ) from error
 
     return clean_ocr_text(text)
 

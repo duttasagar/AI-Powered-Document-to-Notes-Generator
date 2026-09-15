@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import HTTPException, status
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
@@ -7,6 +9,9 @@ from src.document.controller import upload_document
 from src.extraction.service import extract_text
 from src.notes_ai.service import generate_notes
 from src.utils.db import LocalSession
+
+
+logger = logging.getLogger(__name__)
 
 
 async def generate_document_notes(
@@ -64,25 +69,31 @@ async def process_document_generation(document_id: int, user_id: int):
             return
 
         document.status = "extracting"
+        document.error_message = None
         db.commit()
 
+        logger.info("Extracting document %s from %s", document.id, document.file_path)
         text = await extract_text(document.file_path, document.file_type)
         if not text.strip():
             document.status = "extraction_failed"
             document.error_message = "No text could be extracted from this file."
             db.commit()
+            logger.warning("No text extracted from document %s", document.id)
             return
 
         document.extracted_text = text
         document.status = "generating"
         db.commit()
+        logger.info("Extracted %d characters from document %s", len(text), document.id)
 
         stage = "generation"
+        logger.info("Generating notes for document %s", document.id)
         document.generated_notes = await generate_notes(text)
         document.status = "completed"
         db.commit()
+        logger.info("Completed document %s", document.id)
     except Exception as error:
-        print(f"Document generation failed for {document_id}: {error}")
+        logger.exception("Document processing failed for %s during %s", document_id, stage)
         db.rollback()
         document = (
             db.query(DocumentsModel)

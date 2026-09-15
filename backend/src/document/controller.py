@@ -22,16 +22,16 @@ async def upload_document(file:UploadFile, user_id: int, db:Session):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST , detail="File name is required")
 
     extension = os.path.splitext(file.filename)[1].lower()
-    allowed_extensions = {
-         ".pdf",
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".webp",
-        ".txt",
+    content_types = {
+        ".pdf": "application/pdf",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+        ".txt": "text/plain",
     }
 
-    if extension  not in allowed_extensions:
+    if extension not in content_types:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST , detail=f"File type {extension} is not supported")
 
     user_upload_dir = os.path.join(UPLOAD_DIR, str(user_id))
@@ -61,7 +61,7 @@ async def upload_document(file:UploadFile, user_id: int, db:Session):
         user_id=user_id,
         filename=file.filename,
         file_path=file_path,
-        file_type=file.content_type or "application/octet-stream",
+        file_type=content_types[extension],
         file_size=file_size,
         status="uploaded"
     )
