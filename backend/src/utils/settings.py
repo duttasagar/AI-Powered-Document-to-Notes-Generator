@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     GOOGLE_REDIRECT_URI: str
-    FRONTEND_URL: str = "http://localhost:5173"
+    FRONTEND_URL: str
     UPLOAD_MAX_SIZE_MB: int = 10
     MAIL_USERNAME : str
     MAIL_PASSWORD : str
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REFRESH_TOKEN_EXPIRE_DAYS: int
     MAIL_SERVER: str
-    MAIL_PORT: int = 587
+    MAIL_PORT: int = 2525
     
 
 
