@@ -11,7 +11,7 @@ export default function BrandPanel() {
       <div className="brand-lockup"><span className="brand-mark">n</span><span>notely</span></div>
       <div className="brand-copy">
         <p className="eyebrow">A clearer place to think</p>
-        <h1 id="brand-heading">Turn long documents into clear, useful notes.</h1>
+        <h1 id="brand-heading">AI-Powered Study Notes from Your Textbook</h1>
         <p className="intro">Upload your source material and let Notely find the key ideas, explain them simply, and organize them for review.</p>
       </div>
       <div className="feature-list">
